@@ -9,7 +9,7 @@ import { dataSourceOptions } from '../db/data-source';
 
 @Module({
   imports: [
-    TypeOrmModule.forRootAsync(dataSourceOptions),
+    TypeOrmModule.forRoot(dataSourceOptions),
     OfferModule,
     CategoryModule,
     ReviewModule,
