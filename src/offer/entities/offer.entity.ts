@@ -32,7 +32,7 @@ export class OfferEntity {
   @OneToMany(() => ReviewEntity, (review) => review.offer)
   reviews: ReviewEntity[];
 
-  @Column({ type: 'uuid' })
+  @Column({ type: 'uuid', nullable: true })
   category_id: string;
 
   @ManyToOne(() => CategoryEntity, (category) => category.offers, {

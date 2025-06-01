@@ -21,6 +21,6 @@ export class CreateOfferDto {
   images?: string[];
 
   @IsUUID('4')
-  @IsNotEmpty()
+  @IsOptional()
   categoryId: string;
 }
