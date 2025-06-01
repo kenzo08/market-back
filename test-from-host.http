@@ -1,0 +1,53 @@
+GET https://market-back-gqej.onrender.com/api/category/get-by-id/514235e2-4b39-4615-8e58-a18a3b8654e0
+Accept: application/json
+
+###
+GET https://market-back-gqej.onrender.com/api/category/get-all
+Accept: application/json
+
+###
+GET https://market-back-gqej.onrender.com/api/review/get-offer-reviews/4717b023-68c0-47ff-bfc5-bdbc0ee5c1ab
+Accept: application/json
+
+###
+POST https://market-back-gqej.onrender.com/api/review/create
+Content-Type: application/json
+
+{
+  "rating": 3,
+  "text": "good deal",
+  "offerId": "4717b023-68c0-47ff-bfc5-bdbc0ee5c1ab"
+}
+###
+PUT https://market-back-gqej.onrender.com/api/offer/update/5c521374-1387-43b8-bfb8-297f00b9b8db
+Content-Type: application/json
+
+{
+  "title": "Оператор для ваших вечеринок",
+  "description": "помогу запечатлить ваши счастливые дни. Скидка Постоянникам",
+  "images": ["lel", "shpel"],
+  "categoryId": "514235e2-4b39-4615-8e58-a18a3b8654e0"
+}
+
+###
+GET https://market-back-gqej.onrender.com/api/offer/find-by-id/5c521374-1387-43b8-bfb8-297f00b9b8db
+Accept: application/json
+
+###
+POST https://market-back-gqej.onrender.com/api/offer/create
+Content-Type: application/json
+
+{
+  "title": "test offer",
+  "description": "description of test offer",
+  "images": ["Img1", "img2"],
+  "categoryId": "514235e2-4b39-4615-8e58-a18a3b8654e0"
+}
+
+###
+GET https://market-back-gqej.onrender.com/api/offer/all
+Accept: application/json
+
+###
+DELETE https://market-back-gqej.onrender.com/api/offer/delete/3
+Accept: application/json

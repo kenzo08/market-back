@@ -2,21 +2,12 @@ import { CategoryEntity } from '../entities/category.entity';
 import * as dotenv from 'dotenv';
 import { DataSource } from 'typeorm';
 import { categoriesData } from './categories.data';
-import { OfferEntity } from '../../offer/entities/offer.entity';
-import { ReviewEntity } from '../../review/entities/review.entity';
+import process from 'node:process';
+import { dataSourceOptions } from '../../../db/data-source';
 
 async function seed() {
   dotenv.config();
-  const dataSource = new DataSource({
-    type: 'postgres',
-    host: process.env.DB_HOST,
-    port: Number(process.env.POSTGRES_PORT),
-    username: process.env.POSTGRES_USER,
-    password: process.env.POSTGRES_PASSWORD,
-    database: process.env.POSTGRES_DATABASE,
-    entities: [CategoryEntity, OfferEntity, ReviewEntity],
-    synchronize: false, // Отключаем автоматическую синхронизацию
-  });
+  const dataSource = new DataSource(dataSourceOptions);
 
   await dataSource.initialize();
 
@@ -38,9 +29,9 @@ async function seed() {
       categoriesData.map((parentData) =>
         categoryTreeRepository.save({
           name: parentData.name,
-          description: parentData.description || null
-        })
-      )
+          description: parentData.description || null,
+        }),
+      ),
     );
 
     // Создаем дочерние категории
