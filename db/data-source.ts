@@ -1,8 +1,12 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { config } from 'dotenv';
 import { join } from 'path';
+import * as process from 'node:process';
 
 config();
+
+const isProduction = process.env.NODE_ENV === 'production';
+const isSeeding = process.env.NODE_ENV === 'seeding';
 
 export const dataSourceOptions: DataSourceOptions = {
   type: 'postgres',
@@ -11,10 +15,18 @@ export const dataSourceOptions: DataSourceOptions = {
   username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
   database: process.env.POSTGRES_DATABASE,
-  entities: [join(__dirname, '**', '*.entity.{ts,js}')],
-  migrations: [join(__dirname, 'db', 'migrations', '*.{ts,js}')],
-  synchronize: process.env.NODE_ENV !== 'production',
-  logging: true,
+  entities: [join(__dirname, '..', 'src', '**', '*.entity.{ts,js}')],
+  migrations: [join(__dirname, 'migrations', '*.{ts,js}')],
+  migrationsTableName: 'migrations',
+  migrationsRun: isProduction,
+  synchronize: !isProduction && !isSeeding,
+  logging: !isProduction,
+  ssl: isProduction ? { rejectUnauthorized: false } : false,
+  extra: {
+    max: 20,
+    connectionTimeoutMillis: 5000,
+    idleTimeoutMillis: 30000,
+  },
 };
 
 const dataSource = new DataSource(dataSourceOptions);

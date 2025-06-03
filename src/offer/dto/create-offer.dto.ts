@@ -22,5 +22,5 @@ export class CreateOfferDto {
 
   @IsUUID('4')
   @IsOptional()
-  categoryId: string;
+  categoryId?: string;
 }

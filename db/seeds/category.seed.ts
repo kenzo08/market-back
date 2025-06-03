@@ -4,18 +4,15 @@ import { categoriesData } from './categories.data';
 import { CategoryEntity } from '../../src/category/entities/category.entity';
 import { OfferEntity } from '../../src/offer/entities/offer.entity';
 import { ReviewEntity } from '../../src/review/entities/review.entity';
+import { dataSourceOptions } from '../data-source';
 
 async function seed() {
   dotenv.config();
+  process.env.NODE_ENV = 'seeding';
+
   const dataSource = new DataSource({
-    type: 'postgres',
-    host: process.env.DB_HOST,
-    port: Number(process.env.POSTGRES_PORT),
-    username: process.env.POSTGRES_USER,
-    password: process.env.POSTGRES_PASSWORD,
-    database: process.env.POSTGRES_DATABASE,
+    ...dataSourceOptions,
     entities: [CategoryEntity, OfferEntity, ReviewEntity],
-    synchronize: false, // Отключаем автоматическую синхронизацию
   });
 
   await dataSource.initialize();
