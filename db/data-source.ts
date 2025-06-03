@@ -21,7 +21,7 @@ export const dataSourceOptions: DataSourceOptions = {
   migrationsRun: isProduction,
   synchronize: !isProduction && !isSeeding,
   logging: !isProduction,
-  ssl: isProduction ? { rejectUnauthorized: false } : false,
+  ssl: false,
   extra: {
     max: 20,
     connectionTimeoutMillis: 5000,
