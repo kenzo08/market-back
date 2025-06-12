@@ -16,7 +16,7 @@ Content-Type: application/json
 {
   "rating": 3,
   "text": "good deal",
-  "offerId": "4717b023-68c0-47ff-bfc5-bdbc0ee5c1ab",
+  "offerId": "4717b023-68c0-47ff-bfc5-bdbc0ee5c1ab"
 }
 ###
 PUT http://localhost:4000/api/offer/update/5c521374-1387-43b8-bfb8-297f00b9b8db
@@ -30,7 +30,7 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:4000/api/offer/find-by-id/5c521374-1387-43b8-bfb8-297f00b9b8db
+GET http://localhost:4000/api/offer/find-by-id/e25d8415-527f-48a6-9d8f-77345423df52
 Accept: application/json
 
 ###

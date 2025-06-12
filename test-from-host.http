@@ -41,7 +41,7 @@ Content-Type: application/json
   "title": "test offer",
   "description": "description of test offer",
   "images": ["Img1", "img2"],
-  "categoryId": "514235e2-4b39-4615-8e58-a18a3b8654e0"
+  "categoryId": "014210cb-ab93-4032-8590-b72bcc39242d"
 }
 
 ###

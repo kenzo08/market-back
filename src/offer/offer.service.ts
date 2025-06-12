@@ -1,32 +1,37 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { OfferEntity } from './entities/offer.entity';
 import { CreateOfferDto } from './dto/create-offer.dto';
+import { CategoryEntity } from '../category/entities/category.entity';
 
 @Injectable()
 export class OfferService {
   constructor(
     @InjectRepository(OfferEntity)
     private readonly offerRepository: Repository<OfferEntity>,
+    @InjectDataSource() private readonly dataSource: DataSource,
   ) {}
 
   async findAll(): Promise<OfferEntity[]> {
     return await this.offerRepository.find({
-      order: {
-        createdAt: 'desc',
-      },
+      order: { createdAt: 'desc' },
+      relations: ['category'],
     });
   }
 
   async findById(id: string): Promise<OfferEntity> {
-    const foundedOffer = await this.offerRepository.findOne({
-      where: { id: id },
+    const offer = await this.offerRepository.findOne({
+      where: { id },
+      relations: ['category'],
     });
 
-    if (!foundedOffer) throw new NotFoundException('Offer not found');
+    if (!offer) throw new NotFoundException('Offer not found');
 
-    return foundedOffer;
+    const categoryRepo = this.dataSource.getTreeRepository(CategoryEntity);
+    offer.category = await categoryRepo.findAncestorsTree(offer.category);
+
+    return offer;
   }
 
   async create(offerDto: CreateOfferDto): Promise<OfferEntity> {
