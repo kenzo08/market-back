@@ -27,11 +27,13 @@ export class CategoryService {
   async getCategoryById(id: string): Promise<CategoryEntity> {
     const foundedCategory = await this.categoryRepository.findOne({
       where: { id: id },
+      relations: ['offers'],
     });
 
     if (!foundedCategory) throw new NotFoundException('Category not found');
     return foundedCategory;
   }
+
   async deleteCategoryBranchAndReassignAllOffers(categoryId: string) {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();

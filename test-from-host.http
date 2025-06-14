@@ -30,7 +30,7 @@ Content-Type: application/json
 }
 
 ###
-GET https://market-back-gqej.onrender.com/api/offer/find-by-id/5c521374-1387-43b8-bfb8-297f00b9b8db
+GET https://market-back-gqej.onrender.com/api/offer/find-by-id/8d4af88c-7904-442b-892d-ef92cf9d5a78
 Accept: application/json
 
 ###
@@ -41,7 +41,7 @@ Content-Type: application/json
   "title": "test offer",
   "description": "description of test offer",
   "images": ["Img1", "img2"],
-  "categoryId": "014210cb-ab93-4032-8590-b72bcc39242d"
+  "categoryId": "32f98aee-5d8e-48e6-8c10-d71606afbc09"
 }
 
 ###
