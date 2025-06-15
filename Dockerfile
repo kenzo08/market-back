@@ -23,4 +23,4 @@ COPY --from=build /app/tsconfig.build.json ./tsconfig.build.json
 COPY --from=build /app/node_modules ./node_modules
  
 EXPOSE 3000
-CMD ["pnpm", "seed:categories", "start"]
+CMD ["pnpm", "start"]
