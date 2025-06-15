@@ -1,6 +1,7 @@
 POSTGRES_USER = postgres
 POSTGRES_PASSWORD = postgres
-DB_HOST = test-marketdb-aqmomw
+DB_HOST = market-db-2wwcav
 POSTGRES_PORT = 5432
 POSTGRES_DATABASE = market-db
 NODE_ENV = production
+PORT = 4000

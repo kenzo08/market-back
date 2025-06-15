@@ -16,7 +16,7 @@ FROM node:20-alpine
 WORKDIR /app
 RUN npm install -g pnpm
 
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml tsconfig.json ./
 RUN pnpm install --prod
 
 COPY --from=builder /app/dist ./dist
@@ -27,6 +27,6 @@ COPY .env ./
 
 RUN chmod +x start.sh
 
-EXPOSE 4000
+EXPOSE 3000
 
 CMD ["./start.sh"]
