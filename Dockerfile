@@ -16,7 +16,7 @@ FROM node:20-alpine
 WORKDIR /app
 RUN npm install -g pnpm
 
-COPY package.json pnpm-lock.yaml tsconfig.json ./
+COPY package.json pnpm-lock.yaml tsconfig.json tsconfig.build.json ./
 RUN pnpm install --prod
 
 COPY --from=builder /app/dist ./dist
