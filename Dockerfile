@@ -1,25 +1,32 @@
-# 1. Базовый образ
+# Stage 1: Build
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+RUN npm install -g pnpm
+
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install
+
+COPY . .
+RUN pnpm build
+
+# Stage 2: Production
 FROM node:20-alpine
 
-# 2. Рабочая директория
 WORKDIR /app
+RUN npm install -g pnpm
 
-# 3. Установка Corepack + pnpm
-RUN corepack enable && corepack prepare pnpm@9.15.0 --activate
-
-# 4. Копирование зависимостей
 COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --prod
 
-# 5. Установка зависимостей
-RUN pnpm install --frozen-lockfile
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/db ./db
+COPY start.sh ./
+COPY .env ./
 
-# 6. Копирование всего проекта
-COPY . .
+RUN chmod +x start.sh
 
-# 7. Сборка, миграции и сиды
-RUN pnpm run build \
-  && pnpm run migration:run \
-  && pnpm run seed:categories
+EXPOSE 4000
 
-# 8. Запуск прод-приложения
-CMD ["pnpm", "run", "start:prod"]
+CMD ["./start.sh"]

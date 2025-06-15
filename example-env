@@ -1,0 +1,6 @@
+POSTGRES_USER = postgres
+POSTGRES_PASSWORD = postgres
+DB_HOST = test-marketdb-aqmomw
+POSTGRES_PORT = 5432
+POSTGRES_DATABASE = market-db
+NODE_ENV = production
