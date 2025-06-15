@@ -1,32 +1,24 @@
-# Stage 1: Build
-FROM node:20-alpine AS builder
-
+FROM node:18-alpine AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+ 
+FROM base AS build
 WORKDIR /app
-RUN npm install -g pnpm
-
-COPY package.json pnpm-lock.yaml ./
-RUN pnpm install
-
 COPY . .
-RUN pnpm build
-
-# Stage 2: Production
-FROM node:20-alpine
-
+COPY package.json pnpm-lock.yaml ./
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+ENV NODE_ENV=production
+RUN pnpm run build
+ 
+FROM base AS dokploy
 WORKDIR /app
-RUN npm install -g pnpm
-
-COPY package.json pnpm-lock.yaml tsconfig.json tsconfig.build.json ./
-RUN pnpm install --prod
-
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/db ./db
-COPY start.sh ./
-COPY .env ./
-
-RUN chmod +x start.sh
-
+ENV NODE_ENV=production
+ 
+# Copy only the necessary files
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/package.json ./package.json
+COPY --from=build /app/node_modules ./node_modules
+ 
 EXPOSE 3000
-
-CMD ["./start.sh"]
+CMD ["pnpm", "start"]
