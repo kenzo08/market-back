@@ -16,6 +16,9 @@ RUN pnpm install --prod
 # Копируем весь проект
 COPY . .
 
+# Делаем start.sh исполняемым
+RUN chmod +x start.sh
+
 # Компилируем проект (запускаем скрипт build из package.json)
 RUN pnpm run build
 
