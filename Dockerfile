@@ -20,7 +20,7 @@ COPY . .
 RUN pnpm run build
 
 # Открываем порт 3000
-EXPOSE 3000
+EXPOSE 4000
 
 # Запускаем приложение (согласно твоему package.json это node dist/src/main.js)
 CMD ["node", "dist/src/main.js"]
