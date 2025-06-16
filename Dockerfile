@@ -1,26 +1,26 @@
-FROM node:20-alpine AS base
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
- 
-FROM base AS build
+# Используем Node.js 20 на Alpine
+FROM node:20-alpine
+
+# Рабочая директория
 WORKDIR /app
+
+# Устанавливаем pnpm глобально
+RUN npm install -g pnpm
+
+# Копируем package.json и pnpm-lock.yaml (если есть)
+COPY package.json pnpm-lock.yaml* ./
+
+# Устанавливаем зависимости
+RUN pnpm install --prod
+
+# Копируем весь проект
 COPY . .
-COPY package.json pnpm-lock.yaml ./
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
-ENV NODE_ENV=production
+
+# Компилируем проект (запускаем скрипт build из package.json)
 RUN pnpm run build
- 
-FROM base AS dokploy
-WORKDIR /app
-ENV NODE_ENV=production
- 
-# Copy only the necessary files
-COPY --from=build /app/dist ./dist
-COPY --from=build /app/package.json ./package.json
-COPY --from=build /app/tsconfig.json ./tsconfig.json
-COPY --from=build /app/tsconfig.build.json ./tsconfig.build.json
-COPY --from=build /app/node_modules ./node_modules
- 
+
+# Открываем порт 3000
 EXPOSE 3000
-CMD ["pnpm", "start"]
+
+# Запускаем приложение (согласно твоему package.json это node dist/src/main.js)
+CMD ["node", "dist/src/main.js"]
