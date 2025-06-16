@@ -7,6 +7,9 @@ WORKDIR /app
 # Устанавливаем pnpm глобально
 RUN npm install -g pnpm
 
+# Установить Nest CLI глобально
+RUN pnpm install -g @nestjs/cli
+
 # Копируем package.json и pnpm-lock.yaml (если есть)
 COPY package.json pnpm-lock.yaml* ./
 
