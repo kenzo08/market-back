@@ -1,7 +1,10 @@
 #!/bin/sh
 
-echo "🟡 Running database migrations..."
+# Запускаем миграции
 pnpm migration:run
 
-echo "🟢 Starting NestJS app..."
-node dist/src/main
+# Запускаем сиды
+pnpm seed:categories
+
+# Запускаем приложение
+node dist/src/main.js

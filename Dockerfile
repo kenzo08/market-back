@@ -18,9 +18,11 @@ COPY . .
 
 # Компилируем проект (запускаем скрипт build из package.json)
 RUN pnpm run build
+RUN pnpm migration:run
+RUN pnpm seed:categories
 
-# Открываем порт 3000
+# Открываем порт 4000
 EXPOSE 4000
 
 # Запускаем приложение (согласно твоему package.json это node dist/src/main.js)
-CMD ["node", "dist/src/main.js"]
+CMD ["./entrypoint.sh"]
