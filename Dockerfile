@@ -25,4 +25,4 @@ RUN pnpm seed:categories
 EXPOSE 4000
 
 # Запускаем приложение (согласно твоему package.json это node dist/src/main.js)
-CMD ["./entrypoint.sh"]
+CMD ["./start.sh"]
