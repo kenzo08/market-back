@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { ReviewService } from './review.service';
 import { ReviewEntity } from './entities/review.entity';
 import { CreateReviewDto } from './dto/create-review.dto';
@@ -9,12 +9,14 @@ import {
   ApiParam,
   ApiBody,
 } from '@nestjs/swagger';
+import { Public } from '../auth/decorators/public.decorator';
 
 @ApiTags('Отзывы')
 @Controller('review')
 export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
 
+  @Public()
   @Get('get-offer-reviews/:id')
   @ApiOperation({ summary: 'Получить отзывы по ID предложения' })
   @ApiParam({

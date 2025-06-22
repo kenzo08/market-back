@@ -7,6 +7,7 @@ import {
   Param,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CategoryEntity } from './entities/category.entity';
@@ -18,12 +19,17 @@ import {
   ApiParam,
   ApiBody,
 } from '@nestjs/swagger';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { Role } from '../user/enums/role.enum';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Public } from '../auth/decorators/public.decorator';
 
 @ApiTags('Категории')
 @Controller('category')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
+  @Public()
   @Get('get-all')
   @ApiOperation({ summary: 'Получить все категории (с деревом)' })
   @ApiResponse({
@@ -54,6 +60,8 @@ export class CategoryController {
   }
 
   @Post('create')
+  @UseGuards(RolesGuard)
+  @Roles(Role.Admin, Role.Seller)
   @ApiOperation({ summary: 'Создать новую категорию' })
   @ApiBody({
     type: CreateCategoryDto,
@@ -71,6 +79,8 @@ export class CategoryController {
   }
 
   @Delete('delete/:id')
+  @UseGuards(RolesGuard)
+  @Roles(Role.Admin)
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({
     summary:

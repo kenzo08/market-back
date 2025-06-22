@@ -4,6 +4,8 @@ import { categoriesData } from './categories.data';
 import { CategoryEntity } from '../../src/category/entities/category.entity';
 import { OfferEntity } from '../../src/offer/entities/offer.entity';
 import { ReviewEntity } from '../../src/review/entities/review.entity';
+import { User } from '../../src/user/entities/user.entity';
+import { seedUsers } from './user.seed';
 import { dataSourceOptions } from '../data-source';
 
 async function seed() {
@@ -12,7 +14,7 @@ async function seed() {
 
   const dataSource = new DataSource({
     ...dataSourceOptions,
-    entities: [CategoryEntity, OfferEntity, ReviewEntity],
+    entities: [CategoryEntity, OfferEntity, ReviewEntity, User],
   });
 
   await dataSource.initialize();
@@ -26,9 +28,13 @@ async function seed() {
       TRUNCATE TABLE 
         offers, 
         reviews, 
-        categories 
+        categories,
+        users 
       RESTART IDENTITY CASCADE
     `);
+
+    // Создаем пользователей
+    await seedUsers(dataSource);
 
     // Создаем родительские категории
     const parentCategories = await Promise.all(
