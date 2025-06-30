@@ -51,3 +51,34 @@ Accept: application/json
 ###
 DELETE http://localhost:4000/api/offer/delete/3
 Accept: application/json
+
+###
+POST  http://localhost:4000/api/auth/signup
+Content-Type: application/json
+
+{
+  "email": "kenzo.su@bk.ru",
+  "password": "123_tesT"
+}
+
+
+###
+POST  http://localhost:4000/api/auth/signin
+Content-Type: application/json
+
+{
+  "email": "kenzo.su@bk.ru",
+  "password": "123_tesT"
+}
+
+###
+POST  http://localhost:4000/api/auth/resend-verification
+Content-Type: application/json
+
+{
+  "email": "kenzo.su@bk.ru"
+}
+
+###
+GET http://localhost:4000/api/auth/verify-email?token=5951953d1b7310c5f65aba282bfe0d60068841614a3585e4e4da5d8d418f017a
+Accept: application/json

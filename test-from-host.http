@@ -1,16 +1,16 @@
-GET https://market-back-gqej.onrender.com/api/category/get-by-id/514235e2-4b39-4615-8e58-a18a3b8654e0
+GET https://dev-back-mtifgu-4b74af-193-181-209-95.traefik.me/api/category/get-by-id/514235e2-4b39-4615-8e58-a18a3b8654e0
 Accept: application/json
 
 ###
-GET https://market-back-gqej.onrender.com/api/category/get-all
+GET https://dev-back-mtifgu-4b74af-193-181-209-95.traefik.me/api/category/get-all
 Accept: application/json
 
 ###
-GET https://market-back-gqej.onrender.com/api/review/get-offer-reviews/4717b023-68c0-47ff-bfc5-bdbc0ee5c1ab
+GET https://dev-back-mtifgu-4b74af-193-181-209-95.traefik.me/api/review/get-offer-reviews/4717b023-68c0-47ff-bfc5-bdbc0ee5c1ab
 Accept: application/json
 
 ###
-POST https://market-back-gqej.onrender.com/api/review/create
+POST https://dev-back-mtifgu-4b74af-193-181-209-95.traefik.me/api/review/create
 Content-Type: application/json
 
 {
@@ -19,7 +19,7 @@ Content-Type: application/json
   "offerId": "4717b023-68c0-47ff-bfc5-bdbc0ee5c1ab"
 }
 ###
-PUT https://market-back-gqej.onrender.com/api/offer/update/5c521374-1387-43b8-bfb8-297f00b9b8db
+PUT https://dev-back-mtifgu-4b74af-193-181-209-95.traefik.me/api/offer/update/5c521374-1387-43b8-bfb8-297f00b9b8db
 Content-Type: application/json
 
 {
@@ -30,24 +30,24 @@ Content-Type: application/json
 }
 
 ###
-GET https://market-back-gqej.onrender.com/api/offer/find-by-id/8d4af88c-7904-442b-892d-ef92cf9d5a78
+GET https://dev-back-mtifgu-4b74af-193-181-209-95.traefik.me/api/offer/find-by-id/8d4af88c-7904-442b-892d-ef92cf9d5a78
 Accept: application/json
 
 ###
-POST https://market-back-gqej.onrender.com/api/offer/create
+POST https://dev-back-mtifgu-4b74af-193-181-209-95.traefik.me/api/offer/create
 Content-Type: application/json
 
 {
-  "title": "test offer",
+  "title": "test2 offer",
   "description": "description of test offer",
   "images": ["Img1", "img2"],
-  "categoryId": "32f98aee-5d8e-48e6-8c10-d71606afbc09"
+  "categoryId": "5a2d0f06-dee9-495d-aee4-23be6e3b8991"
 }
 
 ###
-GET https://market-back-gqej.onrender.com/api/offer/all
+GET https://dev-back-mtifgu-4b74af-193-181-209-95.traefik.me/api/offer/all
 Accept: application/json
 
 ###
-DELETE https://market-back-gqej.onrender.com/api/offer/delete/3
+DELETE https://dev-back-mtifgu-4b74af-193-181-209-95.traefik.me/api/offer/delete/3
 Accept: application/json
