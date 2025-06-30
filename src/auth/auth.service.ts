@@ -36,7 +36,9 @@ export class AuthService {
     const userExists = await this.userService.findOneByEmail(signUpDto.email);
 
     if (userExists) {
-      throw new ConflictException('Email already exists');
+      throw new ConflictException(
+        'Пользователь с таким email уже зарегистрирован',
+      );
     }
 
     // Устанавливаем роль по умолчанию, если не указана
@@ -57,7 +59,7 @@ export class AuthService {
     return {
       ...tokens,
       message:
-        'Registration successful. Please check your email to verify your account.',
+        'Вы успешно зарегистрировались. Пожалуйста подтвердите свой email',
     };
   }
 
@@ -67,12 +69,12 @@ export class AuthService {
     const user = await this.userService.findOneByEmail(signInDto.email);
     console.log(user);
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Неправильный логин или пароль');
     }
 
     if (!user.emailVerified) {
       throw new BadRequestException(
-        'Please verify your email before signing in',
+        'Пожалуйста подтвердите свою почту для входа',
       );
     }
 
@@ -82,7 +84,7 @@ export class AuthService {
     );
 
     if (!isPasswordMatching) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Неправильный логин или пароль');
     }
 
     const tokens = await this.getTokens(user.id, user.email, user.role);
@@ -195,7 +197,15 @@ export class AuthService {
     });
   }
 
-  private async getTokens(userId: number, email: string, role: Role) {
+  private async getTokens(
+    userId: number,
+    email: string,
+    role: Role,
+  ): Promise<{
+    accessToken: string;
+    refreshToken: string;
+    refreshTokenExpire: number;
+  }> {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
         {
@@ -221,9 +231,12 @@ export class AuthService {
       ),
     ]);
 
+    const decoded = this.jwtService.decode(refreshToken) as { exp: number };
+
     return {
       accessToken,
       refreshToken,
+      refreshTokenExpire: decoded.exp,
     };
   }
 }
