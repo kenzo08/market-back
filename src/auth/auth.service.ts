@@ -41,7 +41,6 @@ export class AuthService {
       );
     }
 
-    // Устанавливаем роль по умолчанию, если не указана
     const userData = {
       ...signUpDto,
       role: signUpDto.role || Role.User,
@@ -50,8 +49,7 @@ export class AuthService {
 
     const user = await this.userService.create(userData);
 
-    // Отправляем email для подтверждения
-    await this.sendVerificationEmail(user.email, user.id);
+    // await this.sendVerificationEmail(user.email, user.id);
 
     const tokens = await this.getTokens(user.id, user.email, user.role);
     await this.updateRefreshToken(user.id, tokens.refreshToken);
@@ -67,16 +65,16 @@ export class AuthService {
     signInDto: SignInDto,
   ): Promise<{ accessToken: string; refreshToken: string }> {
     const user = await this.userService.findOneByEmail(signInDto.email);
-    console.log(user);
+
     if (!user) {
       throw new UnauthorizedException('Неправильный логин или пароль');
     }
 
-    if (!user.emailVerified) {
-      throw new BadRequestException(
-        'Пожалуйста подтвердите свою почту для входа',
-      );
-    }
+    // if (!user.emailVerified) {
+    //   throw new BadRequestException(
+    //     'Пожалуйста подтвердите свою почту для входа',
+    //   );
+    // }
 
     const isPasswordMatching = await bcrypt.compare(
       signInDto.password,
@@ -92,78 +90,78 @@ export class AuthService {
     return tokens;
   }
 
-  private async sendVerificationEmail(email: string, userId: number) {
-    const token = crypto.randomBytes(32).toString('hex');
+  // private async sendVerificationEmail(email: string, userId: number) {
+  //   const token = crypto.randomBytes(32).toString('hex');
+  //
+  //   const user = await this.userService.findOneById(userId);
+  //   if (!user) throw new Error('User not found');
+  //
+  //   const verification = this.verificationRepo.create({ token, user });
+  //   await this.verificationRepo.save(verification);
+  //
+  //   const verifyUrl = `${this.configService.get(
+  //     'FRONTEND_URL',
+  //   )}/verify-email?token=${token}`;
+  //
+  //   try {
+  //     const mailgun = new Mailgun(FormData);
+  //     const mg = mailgun.client({
+  //       username: 'api',
+  //       key: this.configService.get<string>('EMAIL_SERVER_API_KEY'),
+  //     });
+  //
+  //     await mg.messages.create(this.configService.get<string>('EMAIL_DOMAIN'), {
+  //       from: 'Mailgun Sandbox <postmaster@sandboxf823e77d7e3849e3b7ebe1bd1fe5edef.mailgun.org>',
+  //       to: [email],
+  //       subject: 'Привет, подтверди почту',
+  //       template: 'Подтвердить почту',
+  //       'h:X-Mailgun-Variables': JSON.stringify({
+  //         EMAIL_VERIFICATION: verifyUrl,
+  //       }),
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
-    const user = await this.userService.findOneById(userId);
-    if (!user) throw new Error('User not found');
+  // async verifyEmailToken(token: string): Promise<{ message: string }> {
+  //   const verification = await this.verificationRepo.findOne({
+  //     where: { token },
+  //     relations: ['user'],
+  //   });
+  //
+  //   if (!verification) {
+  //     throw new BadRequestException('Invalid or expired token');
+  //   }
+  //
+  //   const user = verification.user;
+  //
+  //   if (user.emailVerified) {
+  //     throw new BadRequestException('Email already verified');
+  //   }
+  //
+  //   user.emailVerified = true;
+  //   await this.userService.update(user.id, { emailVerified: true });
+  //   await this.verificationRepo.delete({ token });
+  //
+  //   return { message: 'Email verified successfully' };
+  // }
 
-    const verification = this.verificationRepo.create({ token, user });
-    await this.verificationRepo.save(verification);
-
-    const verifyUrl = `${this.configService.get(
-      'FRONTEND_URL',
-    )}/verify-email?token=${token}`;
-
-    try {
-      const mailgun = new Mailgun(FormData);
-      const mg = mailgun.client({
-        username: 'api',
-        key: this.configService.get<string>('EMAIL_SERVER_API_KEY'),
-      });
-
-      await mg.messages.create(this.configService.get<string>('EMAIL_DOMAIN'), {
-        from: 'Mailgun Sandbox <postmaster@sandboxf823e77d7e3849e3b7ebe1bd1fe5edef.mailgun.org>',
-        to: [email],
-        subject: 'Привет, подтверди почту',
-        template: 'Подтвердить почту',
-        'h:X-Mailgun-Variables': JSON.stringify({
-          EMAIL_VERIFICATION: verifyUrl,
-        }),
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async verifyEmailToken(token: string): Promise<{ message: string }> {
-    const verification = await this.verificationRepo.findOne({
-      where: { token },
-      relations: ['user'],
-    });
-
-    if (!verification) {
-      throw new BadRequestException('Invalid or expired token');
-    }
-
-    const user = verification.user;
-
-    if (user.emailVerified) {
-      throw new BadRequestException('Email already verified');
-    }
-
-    user.emailVerified = true;
-    await this.userService.update(user.id, { emailVerified: true });
-    await this.verificationRepo.delete({ token });
-
-    return { message: 'Email verified successfully' };
-  }
-
-  async resendVerificationEmail(email: string): Promise<{ message: string }> {
-    const user = await this.userService.findOneByEmail(email);
-
-    if (!user) {
-      throw new BadRequestException('User not found');
-    }
-
-    if (user.emailVerified) {
-      throw new BadRequestException('Email already verified');
-    }
-
-    await this.sendVerificationEmail(user.email, user.id);
-
-    return { message: 'Verification email sent successfully' };
-  }
+  // async resendVerificationEmail(email: string): Promise<{ message: string }> {
+  //   const user = await this.userService.findOneByEmail(email);
+  //
+  //   if (!user) {
+  //     throw new BadRequestException('User not found');
+  //   }
+  //
+  //   if (user.emailVerified) {
+  //     throw new BadRequestException('Email already verified');
+  //   }
+  //
+  //   await this.sendVerificationEmail(user.email, user.id);
+  //
+  //   return { message: 'Verification email sent successfully' };
+  // }
 
   async logout(userId: number): Promise<void> {
     await this.updateRefreshToken(userId, null);

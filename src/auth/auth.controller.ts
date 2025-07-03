@@ -34,19 +34,19 @@ export class AuthController {
     return this.authService.signIn(signInDto);
   }
 
-  @Public()
-  @Get('verify-email')
-  @HttpCode(HttpStatus.OK)
-  async verifyEmail(@Query('token') token: string) {
-    return this.authService.verifyEmailToken(token);
-  }
+  // @Public()
+  // @Get('verify-email')
+  // @HttpCode(HttpStatus.OK)
+  // async verifyEmail(@Query('token') token: string) {
+  //   return this.authService.verifyEmailToken(token);
+  // }
 
-  @Public()
-  @Post('resend-verification')
-  @HttpCode(HttpStatus.OK)
-  resendVerificationEmail(@Body() body: { email: string }) {
-    return this.authService.resendVerificationEmail(body.email);
-  }
+  // @Public()
+  // @Post('resend-verification')
+  // @HttpCode(HttpStatus.OK)
+  // resendVerificationEmail(@Body() body: { email: string }) {
+  //   return this.authService.resendVerificationEmail(body.email);
+  // }
 
   @Post('logout')
   @HttpCode(HttpStatus.OK)
