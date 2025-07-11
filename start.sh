@@ -4,7 +4,7 @@
 pnpm migration:run
 
 # Запускаем сиды
-pnpm seed:categories
+#pnpm seed:categories
 
 # Запускаем приложение
 node dist/src/main.js

@@ -42,6 +42,14 @@ $ pnpm dev
 $ pnpm run start:prod
 ```
 
+# migration generate
+$ pnpm migration:generate db/migrations/migrationName
+
+
+# migration run
+$ pnpm migration:run
+```
+
 ## Run tests
 
 ```bash
