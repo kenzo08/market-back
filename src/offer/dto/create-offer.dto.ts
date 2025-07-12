@@ -45,4 +45,21 @@ export class CreateOfferDto {
   @IsUUID('4')
   @IsOptional()
   categoryId?: string;
+
+  @ApiPropertyOptional({
+    example: 'г. Москва, ул. Ленина, 1',
+    description: 'Адрес филиала/точки',
+  })
+  @IsOptional()
+  @IsString()
+  branchAddress?: string;
+
+  @ApiPropertyOptional({
+    example: 'a1b2c3d4-e5f6-7890-1234-56789abcdef0',
+    description: 'ID автора/создателя оффера',
+    format: 'uuid',
+  })
+  @IsUUID('4')
+  @IsOptional()
+  authorId?: string;
 }

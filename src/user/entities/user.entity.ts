@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { Role } from '../enums/role.enum';
 import * as bcrypt from 'bcrypt';
+import { Exclude } from 'class-transformer';
 
 @Entity('users')
 export class User {
@@ -18,6 +19,7 @@ export class User {
   email: string;
 
   @Column()
+  @Exclude()
   password: string;
 
   @Column({
@@ -31,9 +33,11 @@ export class User {
   phone?: string;
 
   @Column({ default: false })
+  @Exclude()
   emailVerified: boolean;
 
   @Column({ nullable: true })
+  @Exclude()
   refreshToken?: string;
 
   @CreateDateColumn()

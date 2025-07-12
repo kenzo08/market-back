@@ -6,8 +6,10 @@ import {
   Param,
   Post,
   Put,
+  Req,
   UseGuards,
 } from '@nestjs/common';
+import { Request as ExpressRequest } from 'express';
 import { OfferService } from './offer.service';
 import { CreateOfferDto } from './dto/create-offer.dto';
 import { OfferEntity } from './entities/offer.entity';
@@ -16,6 +18,11 @@ import { Public } from '../auth/decorators/public.decorator';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { Role } from '../user/enums/role.enum';
 import { RolesGuard } from '../auth/guards/roles.guard';
+import { JwtPayload } from '../auth/strategies/access-token.strategy';
+
+interface AuthenticatedRequest extends ExpressRequest {
+  user: JwtPayload;
+}
 
 @Controller('offer')
 export class OfferController {
@@ -57,8 +64,11 @@ export class OfferController {
     description: 'Successfully created offer',
     type: OfferEntity,
   })
-  async create(@Body() offer: CreateOfferDto): Promise<OfferEntity> {
-    return await this.offerService.create(offer);
+  async create(
+    @Body() offer: CreateOfferDto,
+    @Req() req: AuthenticatedRequest,
+  ) {
+    return await this.offerService.create({ ...offer, authorId: req.user.sub });
   }
 
   @Put('update/:id')

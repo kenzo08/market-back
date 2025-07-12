@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { AccessTokenGuard } from './auth/guards/access-token.guard';
+import { BookingModule } from './booking/booking.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { AccessTokenGuard } from './auth/guards/access-token.guard';
     ReviewModule,
     UserModule,
     AuthModule,
+    BookingModule,
   ],
   providers: [
     {

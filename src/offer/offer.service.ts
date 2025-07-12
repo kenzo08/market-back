@@ -16,7 +16,7 @@ export class OfferService {
   async findAll(): Promise<OfferEntity[]> {
     return await this.offerRepository.find({
       order: { createdAt: 'desc' },
-      relations: ['category'],
+      relations: ['category', 'author'],
     });
   }
 
@@ -42,6 +42,8 @@ export class OfferService {
       description: offerDto.description,
       images: offerDto.images,
       category_id: offerDto.categoryId,
+      author: { id: Number(offerDto.authorId) },
+      branchAddress: offerDto.branchAddress,
     });
 
     return await this.offerRepository.save(newOffer);
