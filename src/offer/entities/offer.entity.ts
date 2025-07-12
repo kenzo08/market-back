@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { ReviewEntity } from '../../review/entities/review.entity';
 import { CategoryEntity } from '../../category/entities/category.entity';
+import { User } from '../../user/entities/user.entity';
 
 @Entity({ name: 'offers' })
 export class OfferEntity {
@@ -51,6 +52,21 @@ export class OfferEntity {
   })
   @JoinColumn({ name: 'category_id' })
   category: CategoryEntity;
+
+  @ApiPropertyOptional({
+    type: () => User,
+    description: 'Автор/создатель оффера',
+  })
+  @ManyToOne(() => User, { nullable: false })
+  @JoinColumn({ name: 'author_id' })
+  author: User;
+
+  @ApiPropertyOptional({
+    example: 'г. Москва, ул. Ленина, 1',
+    description: 'Адрес филиала/точки',
+  })
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  branchAddress?: string;
 
   @ApiProperty({ example: '2025-06-13T15:30:00.000Z' })
   @CreateDateColumn()
