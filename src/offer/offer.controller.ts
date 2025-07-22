@@ -19,6 +19,9 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { Role } from '../user/enums/role.enum';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { JwtPayload } from '../auth/strategies/access-token.strategy';
+import { UpdateOfferStatusDto } from './dto/update-offer-status.dto';
+import { GetCurrentUserId } from '../auth/decorators/get-current-user-id.decorator';
+import { GetCurrentUser } from '../auth/decorators/get-current-user.decorator';
 
 interface AuthenticatedRequest extends ExpressRequest {
   user: JwtPayload;
@@ -93,5 +96,25 @@ export class OfferController {
   @Roles(Role.Seller, Role.Admin)
   async delete(@Param('id') id: string): Promise<OfferEntity> {
     return await this.offerService.delete(id);
+  }
+
+  @Put('update-status/:id')
+  @UseGuards(RolesGuard)
+  @Roles(Role.Seller, Role.Admin)
+  @ApiOperation({ summary: 'Update status of offer' })
+  @ApiParam({ name: 'id', type: 'string', description: 'ID оффера' })
+  @ApiBody({ type: UpdateOfferStatusDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Offer status updated',
+    type: OfferEntity,
+  })
+  async updateStatus(
+    @Param('id') id: string,
+    @Body() dto: UpdateOfferStatusDto,
+    @GetCurrentUserId() userId: number,
+    @GetCurrentUser('role') role: Role,
+  ): Promise<OfferEntity> {
+    return await this.offerService.updateStatus(id, dto.status, userId, role);
   }
 }

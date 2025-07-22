@@ -1,11 +1,14 @@
 import {
   IsArray,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
   IsUUID,
+  ValidateNested,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 
 export class CreateOfferDto {
   @ApiProperty({
@@ -23,6 +26,11 @@ export class CreateOfferDto {
   @IsNotEmpty()
   @IsString()
   description: string;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => PriceDto)
+  prices: PriceDto[];
 
   @ApiPropertyOptional({
     example: [
@@ -62,4 +70,12 @@ export class CreateOfferDto {
   @IsUUID('4')
   @IsOptional()
   authorId?: string;
+}
+
+class PriceDto {
+  @IsNumber()
+  price: number;
+
+  @IsString()
+  priceType: string;
 }

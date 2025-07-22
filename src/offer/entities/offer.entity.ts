@@ -12,6 +12,7 @@ import {
 import { ReviewEntity } from '../../review/entities/review.entity';
 import { CategoryEntity } from '../../category/entities/category.entity';
 import { User } from '../../user/entities/user.entity';
+import { OfferStatus } from '../enums/status.enum';
 
 @Entity({ name: 'offers' })
 export class OfferEntity {
@@ -27,6 +28,9 @@ export class OfferEntity {
   @Column({ type: 'text' })
   description: string;
 
+  @Column('jsonb')
+  prices: { price: number; priceType: string }[];
+
   @ApiPropertyOptional({
     example: ['https://example.com/img1.jpg'],
     type: [String],
@@ -37,6 +41,13 @@ export class OfferEntity {
   @ApiPropertyOptional({ type: () => [ReviewEntity] })
   @OneToMany(() => ReviewEntity, (review) => review.offer)
   reviews: ReviewEntity[];
+
+  @Column({
+    type: 'enum',
+    enum: OfferStatus,
+    default: OfferStatus.DRAFT,
+  })
+  status: OfferStatus;
 
   @ApiPropertyOptional({
     example: 'd290f1ee-6c54-4b01-90e6-d701748f0851',

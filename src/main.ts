@@ -4,6 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as dotenv from 'dotenv';
 import { ClassSerializerInterceptor } from '@nestjs/common';
+import * as process from 'node:process';
 
 dotenv.config();
 
@@ -11,7 +12,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors({
-    origin: process.env.FRONTEND_URL,
+    origin: [process.env.FRONTEND_URL, process.env.ADMIN_FRONTEND_URL],
     credentials: true,
   });
   app.setGlobalPrefix('api');

@@ -1,9 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { OfferEntity } from './entities/offer.entity';
 import { CreateOfferDto } from './dto/create-offer.dto';
 import { CategoryEntity } from '../category/entities/category.entity';
+import { OfferStatus } from './enums/status.enum';
+import { Role } from '../user/enums/role.enum';
 
 @Injectable()
 export class OfferService {
@@ -59,5 +65,27 @@ export class OfferService {
   async delete(id: string): Promise<OfferEntity> {
     const foundedOffer = await this.findById(id);
     return await this.offerRepository.remove(foundedOffer);
+  }
+
+  async updateStatus(
+    id: string,
+    status: OfferStatus,
+    sellerId: number,
+    role: Role,
+  ): Promise<OfferEntity> {
+    const offer = await this.findById(id);
+
+    if (!offer) throw new NotFoundException('Торговое предложение не найдено');
+
+    if (offer.author.id !== sellerId && role !== 'admin') {
+      throw new ForbiddenException('Нет доступа');
+    }
+
+    if (status === OfferStatus.PUBLISHED && role !== 'admin') {
+      throw new ForbiddenException('Нет прав для данной операций');
+    }
+
+    offer.status = status;
+    return await this.offerRepository.save(offer);
   }
 }
